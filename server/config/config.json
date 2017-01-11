@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "borrowDev",
+    "password": null,
+    "database": "borrow_development",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "borrowDev",
+    "password": null,
+    "database": "borrow_test",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "borrowDev",
+    "password": null,
+    "database": "borrow_production",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}
