@@ -1,5 +1,6 @@
 import { User } from '../../../models'
 
+// TODO throw actual errors when users don't exist or usernames are taken
 exports.create = async function (req, res) {
   const username = req.body.username;
   const user = await User.create({ username })

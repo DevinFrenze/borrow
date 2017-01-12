@@ -1,11 +1,18 @@
-import users from './users/user.controller'
+import book from './book/book.controller'
+import user from './user/user.controller'
 import express from 'express'
 const router = express.Router()
 
-router.post('/users', users.create)
-router.get('/users', users.readAll)
-router.get('/users/:id', users.read)
-router.patch('/users/:id', users.update)
-router.delete('/users/:id', users.delete)
+router.post('/books', book.create)
+router.get('/books', book.readAll)
+router.get('/books/:id', book.read)
+router.patch('/books/:id', book.update)
+router.delete('/books/:id', book.delete)
+
+router.post('/users', user.create)
+router.get('/users', user.readAll)
+router.get('/users/:id', user.read)
+router.patch('/users/:id', user.update)
+router.delete('/users/:id', user.delete)
 
 export default router

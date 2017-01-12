@@ -4,7 +4,9 @@ module.exports = function(sequelize, DataTypes) {
     username: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true, // TODO figure out why this is not forcing uniqueness
+      unique: { // TODO figure out why this is not forcing uniqueness
+        msg: "a user with this username already exists",
+      },
       validate: { notEmpty: true }
     }
   }, {
