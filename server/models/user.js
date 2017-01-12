@@ -8,6 +8,10 @@ module.exports = function(sequelize, DataTypes) {
         msg: "a user with this username already exists",
       },
       validate: { notEmpty: true }
+    },
+    libraryLocation: {
+      type: DataTypes.GEOMETRY('POINT'),
+      allowNull: true
     }
   }, {
     classMethods: {

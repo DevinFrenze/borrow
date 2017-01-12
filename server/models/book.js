@@ -10,11 +10,26 @@ module.exports = function(sequelize, DataTypes) {
           return isbn.length === 10 || isbn.length === 13;
         }
       }
+    },
+    searchable: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true
+    },
+    available: {
+      type: DataTypes.VIRTUAL,
+      get: function () {
+        const owner = this.getDataValue('owner');
+        const inCustodyOf = this.getDataValue('inCustodyOf');
+        const searchable = this.getDataValue('searchable');
+        return searchable && owner === inCustodyOf;
+      }
     }
   }, {
     classMethods: {
       associate: function(models) {
         Book.belongsTo(models.User, { foreignKey: { name: 'owner', allowNull: false } });
+        Book.belongsTo(models.User, { foreignKey: { name: 'inCustodyOf', allowNull: false } });
       }
     }
   });

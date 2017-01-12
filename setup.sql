@@ -1,5 +1,8 @@
+SELECT 'Dropping borrow_development database.' as '';
+DROP DATABASE IF EXISTS borrow_development;
+
 SELECT 'Creating borrow_development database.' as '';
-CREATE DATABASE IF NOT EXISTS borrow_development;
+CREATE DATABASE borrow_development;
 
 SELECT 'Creating borrow_development users.' as '';
 CREATE USER IF NOT EXISTS 'borrowDev'@'localhost';
