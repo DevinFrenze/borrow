@@ -1,8 +1,13 @@
 import 'babel-polyfill'
+import bodyParser from 'body-parser'
 import models from './models'
 
 import express from 'express'
 const app = express()
+
+// TODO move to config
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }));
 
 import routes from './routes'
 routes(app)
