@@ -2,7 +2,8 @@ import { Book } from '../../../models'
 
 exports.create = async function (req, res) {
   const isbn = req.body.isbn
-  const book = await Book.create({ isbn })
+  const owner = parseInt(req.body.userId, 10)
+  const book = await Book.create({ isbn, owner })
   res.status(201).send(book)
 }
 

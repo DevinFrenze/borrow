@@ -14,7 +14,7 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     classMethods: {
       associate: function(models) {
-        Book.belongsTo(models.User);
+        Book.belongsTo(models.User, { foreignKey: { name: 'owner', allowNull: false } });
       }
     }
   });
