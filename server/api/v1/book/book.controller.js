@@ -32,3 +32,11 @@ exports.delete = async function (req, res) {
   book.destroy()
   res.status(200).send('book destroyed')
 }
+
+exports.search = async function(req, res) {
+  const isbn = req.query.isbn
+  console.log('isbn ' + (typeof isbn))
+  console.log(isbn)
+  const books = await Book.findAll({ where: { isbn } })
+  return res.status(200).send(books)
+}

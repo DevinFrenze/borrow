@@ -2,8 +2,9 @@ import { Book, User } from '../../../models'
 
 // TODO throw actual errors when users don't exist or usernames are taken
 exports.create = async function (req, res) {
-  const username = req.body.username;
-  const user = await User.create({ username }).catch((e) => console.log(e))
+  const { username, locationCoordinates } = req.body
+  const location = { type: 'Point', coordinates: [37.9, -13.3] }
+  const user = await User.create({ username, location }).catch((e) => console.log(e))
   res.status(201).send(user)
 }
 

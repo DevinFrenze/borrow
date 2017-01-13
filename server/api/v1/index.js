@@ -3,6 +3,8 @@ import user from './user/user.controller'
 import express from 'express'
 const router = express.Router()
 
+router.get('/books/search', book.search)
+
 router.post('/books', book.create)
 router.get('/books', book.readAll)
 router.get('/books/:id', book.read)
