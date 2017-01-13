@@ -3,7 +3,7 @@ import { Book, User } from '../../../models'
 exports.create = async function (req, res) {
   const isbn = req.body.isbn
   const ownerId = parseInt(req.body.userId, 10)
-  const book = await Book.create({ isbn, ownerId, inCustodyOfId: ownerId })
+  const book = await Book.create({ isbn, ownerId, custodyId: ownerId })
   res.status(201).send(book)
 }
 
@@ -20,9 +20,9 @@ exports.read = async function (req, res) {
 
 exports.update = async function (req, res) {
   const bookId = req.params.id
-  const inCustodyOfId = req.body.inCustodyOfId
+  const custodyId = req.body.custodyId
   const book = await Book.findById(bookId)
-  await book.update({ inCustodyOfId })
+  await book.update({ custodyId })
   res.status(200).send(book)
 }
 
@@ -35,8 +35,6 @@ exports.delete = async function (req, res) {
 
 exports.search = async function(req, res) {
   const isbn = req.query.isbn
-  console.log('isbn ' + (typeof isbn))
-  console.log(isbn)
   const books = await Book.findAll({ where: { isbn } })
   return res.status(200).send(books)
 }

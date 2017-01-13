@@ -4,7 +4,7 @@ module.exports = function(sequelize, DataTypes) {
     isbn: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
+      unique: false,
       validate: {
         isTenOrThirteenLong: function(isbn) {
           return isbn.length === 10 || isbn.length === 13;
@@ -20,16 +20,28 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.VIRTUAL,
       get: function () {
         const ownerId = this.getDataValue('ownerId');
-        const inCustodyOfId = this.getDataValue('inCustodyOfId');
+        const custodyId = this.getDataValue('custodyId');
         const searchable = this.getDataValue('searchable');
-        return searchable && ownerId === inCustodyOfId;
+        return searchable && ownerId === custodyId;
       }
     }
   }, {
     classMethods: {
       associate: function(models) {
-        Book.belongsTo(models.User, { as: 'libraryBook', foreignKey: 'ownerId' });
-        Book.belongsTo(models.User, { as: 'borrowingBook', foreignKey: 'inCustodyOfId' });
+        Book.belongsTo(models.User, {
+          as: 'libraryBook',
+          foreignKey: {
+            name: 'ownerId',
+            allowNull: false
+          }
+        });
+        Book.belongsTo(models.User, {
+          as: 'borrowingBook',
+          foreignKey: {
+            name: 'custodyId',
+            allowNull: false
+          }
+        });
       }
     }
   });
