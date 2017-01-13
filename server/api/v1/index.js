@@ -6,7 +6,7 @@ const router = express.Router()
 router.post('/books', book.create)
 router.get('/books', book.readAll)
 router.get('/books/:id', book.read)
-router.patch('/books/:id', book.update)
+router.patch('/books/:id', book.update)   // check out a book by update 'inCustodyOf'
 router.delete('/books/:id', book.delete)
 
 router.post('/users', user.create)

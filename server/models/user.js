@@ -8,17 +8,14 @@ module.exports = function(sequelize, DataTypes) {
         msg: "a user with this username already exists",
       },
       validate: { notEmpty: true }
-    },
-    libraryLocation: {
-      type: DataTypes.GEOMETRY('POINT'),
-      allowNull: true
     }
   }, {
     classMethods: {
       associate: function(models) {
-        User.hasMany(models.Book);
+        User.hasMany(models.Book, { as: 'libraryBooks', foreignKey: 'ownerId' });
+        User.hasMany(models.Book, { as: 'borrowingBooks', foreignKey: 'inCustodyOfId' });
       }
-    }
+    },
   });
   return User;
 };

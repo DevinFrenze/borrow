@@ -19,17 +19,17 @@ module.exports = function(sequelize, DataTypes) {
     available: {
       type: DataTypes.VIRTUAL,
       get: function () {
-        const owner = this.getDataValue('owner');
-        const inCustodyOf = this.getDataValue('inCustodyOf');
+        const ownerId = this.getDataValue('ownerId');
+        const inCustodyOfId = this.getDataValue('inCustodyOfId');
         const searchable = this.getDataValue('searchable');
-        return searchable && owner === inCustodyOf;
+        return searchable && ownerId === inCustodyOfId;
       }
     }
   }, {
     classMethods: {
       associate: function(models) {
-        Book.belongsTo(models.User, { foreignKey: { name: 'owner', allowNull: false } });
-        Book.belongsTo(models.User, { foreignKey: { name: 'inCustodyOf', allowNull: false } });
+        Book.belongsTo(models.User, { as: 'libraryBook', foreignKey: 'ownerId' });
+        Book.belongsTo(models.User, { as: 'borrowingBook', foreignKey: 'inCustodyOfId' });
       }
     }
   });

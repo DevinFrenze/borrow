@@ -6,6 +6,7 @@
   "scripts": {
     "build": "babel ./server -d build --copy-files",
     "clean": "rm -rf ./build",
+    "reset": "mysql -u root -p < setup.sql",
     "sequelize": "cd ./server && sequelize",
     "start": "node build/index.js",
     "dev": "npm run clean && npm run build && npm run watch & nodemon --watch build ./build/index.js",

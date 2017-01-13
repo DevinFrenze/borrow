@@ -1,9 +1,9 @@
-import { Book } from '../../../models'
+import { Book, User } from '../../../models'
 
 exports.create = async function (req, res) {
   const isbn = req.body.isbn
-  const owner = parseInt(req.body.userId, 10)
-  const book = await Book.create({ isbn, owner, inCustodyOf: owner })
+  const ownerId = parseInt(req.body.userId, 10)
+  const book = await Book.create({ isbn, ownerId, inCustodyOfId: ownerId })
   res.status(201).send(book)
 }
 
@@ -19,10 +19,10 @@ exports.read = async function (req, res) {
 }
 
 exports.update = async function (req, res) {
-  const bookId = req.params.id;
-  const isbn = req.body.isbn;
-  const book = await Book.findById(bookId);
-  await book.update({ isbn })
+  const bookId = req.params.id
+  const inCustodyOfId = req.body.inCustodyOfId
+  const book = await Book.findById(bookId)
+  await book.update({ inCustodyOfId })
   res.status(200).send(book)
 }
 
