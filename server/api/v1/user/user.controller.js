@@ -1,4 +1,4 @@
-import { User } from '../../../models'
+import { Book, User } from '../../../models'
 
 // TODO throw actual errors when users don't exist or usernames are taken
 exports.create = async function (req, res) {
@@ -8,13 +8,25 @@ exports.create = async function (req, res) {
 }
 
 exports.readAll = async function (req, res) {
-  const users = await User.findAll().catch((e) => console.log(e))
+  const users = await User.findAll({
+    include: [
+      { model: Book, as: 'libraryBooks' },
+      { model: Book, as: 'borrowingBooks' }
+    ]
+  })
   res.status(200).send(users)
 }
 
 exports.read = async function (req, res) {
   const userId = req.params.id
-  const user = await User.findById(userId)
+  const user = await User.findById(userId,
+    {
+      include: [
+        { model: Book, as: 'libraryBooks' },
+        { model: Book, as: 'borrowingBooks' }
+      ]
+    }
+  )
   res.status(200).send(user)
 }
 
