@@ -2,8 +2,8 @@ import { Book, User } from '../../../models'
 
 // TODO throw actual errors when users don't exist or usernames are taken
 exports.create = async function (req, res) {
-  const { username, locationCoordinates } = req.body
-  const location = { type: 'Point', coordinates: [37.9, -13.3] }
+  const { username, latitude, longitude } = req.body
+  const location = latitude && longitude && { type: 'Point', coordinates: [latitude, longitude] }
   const user = await User.create({ username, location }).catch((e) => console.log(e))
   res.status(201).send(user)
 }
@@ -32,10 +32,12 @@ exports.read = async function (req, res) {
 }
 
 exports.update = async function (req, res) {
-  const userId = req.params.id;
-  const username = req.body.username;
-  const user = await User.findById(userId);
-  await user.update({ username })
+  const userId = req.params.id
+  const { username, latitude, longitude } = req.body
+  const location = latitude && longitude && { type: 'Point', coordinates: [latitude, longitude] }
+  const user = await User.findById(userId)
+  // note: if location is undefined, it won't replace the current location
+  await user.update({ username, location })
   res.status(200).send(user)
 }
 
