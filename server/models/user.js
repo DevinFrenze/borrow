@@ -9,6 +9,12 @@ module.exports = function(sequelize, DataTypes) {
       },
       validate: { notEmpty: true }
     },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: 'password', // TODO remove this line after testing
+      validate: { notEmpty: true }
+    },
     location: {
       type: DataTypes.GEOMETRY('POINT'),
       allowNull: true
