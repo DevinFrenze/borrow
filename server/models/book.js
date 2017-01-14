@@ -16,17 +16,11 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       defaultValue: true
     },
-      /*
-    available: {
-      type: DataTypes.VIRTUAL,
-      get: function () {
-        const ownerId = this.getDataValue('ownerId');
-        const custodyId = this.getDataValue('custodyId');
-        const searchable = this.getDataValue('searchable');
-        return searchable && ownerId === custodyId;
-      }
-    }
-    */
+    checkedOut: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
+    },
   }, {
     classMethods: {
       associate: function(models) {
@@ -43,10 +37,12 @@ module.exports = function(sequelize, DataTypes) {
     },
 
     hooks: {
-      beforeCreate: function() { console.log('BEFORE CREATE !!!') },
-      afterCreate: function() { console.log('AFTER CREATE !!!') },
-      beforeUpdate: function() { console.log('BEFORE UPDATE !!!') },
-      afterUpdate: function() { console.log('AFTER UPDATE !!!') },
+      afterCreate: async function(book) {
+        await book.createHistoryState({
+          receivingCustodyId: book.ownerId,
+          givingCustodyId: book.ownerId
+        })
+      }
     }
   });
   return Book;

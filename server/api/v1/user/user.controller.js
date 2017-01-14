@@ -4,7 +4,7 @@ import { Book, BookState, User } from '../../../models'
 exports.create = async function (req, res) {
   const { username, latitude, longitude } = req.body
   const location = latitude && longitude && { type: 'Point', coordinates: [latitude, longitude] }
-  const user = await User.create({ username, location }).catch((e) => console.log(e))
+  const user = await User.create({ username, location })
   res.status(201).send(user)
 }
 

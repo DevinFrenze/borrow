@@ -4,7 +4,6 @@ exports.create = async function (req, res) {
   const isbn = req.body.isbn
   const ownerId = parseInt(req.body.userId, 10)
   const book = await Book.create({ isbn, ownerId })
-  await book.createHistoryState({ receivingCustodyId: ownerId, givingCustodyId: ownerId })
   res.status(201).send(book)
 }
 
@@ -21,16 +20,19 @@ exports.read = async function (req, res) {
   res.status(200).send(book)
 }
 
+// function to check out a book
+// TODO add function for changing searchability of book
 exports.update = async function (req, res) {
   const bookId = req.params.id
-  const custodyId = req.body.custodyId
-  const book = await Book.findById(bookId)
+  const custodyId = parseInt(req.body.custodyId, 10)
+  let book = await Book.findById(bookId)
   const historyStates = await book.getHistoryStates()
   const currentState = historyStates[historyStates.length - 1]
   await book.createHistoryState({
     receivingCustodyId: custodyId,
     givingCustodyId: currentState.receivingCustodyId
   })
+  await book.reload()
   res.status(200).send(book)
 }
 
