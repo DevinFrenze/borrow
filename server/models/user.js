@@ -17,7 +17,8 @@ module.exports = function(sequelize, DataTypes) {
     classMethods: {
       associate: function(models) {
         User.hasMany(models.Book, { as: 'libraryBooks', foreignKey: 'ownerId' })
-        User.hasMany(models.Book, { as: 'borrowingBooks', foreignKey: 'custodyId' })
+        User.hasMany(models.BookState, { as: 'receivingHistoryStates', foreignKey: 'receivingCustodyId' })
+        User.hasMany(models.BookState, { as: 'givingHistoryStates', foreignKey: 'givingCustodyId' })
       }
     },
   });

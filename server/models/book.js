@@ -16,6 +16,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       defaultValue: true
     },
+      /*
     available: {
       type: DataTypes.VIRTUAL,
       get: function () {
@@ -25,6 +26,7 @@ module.exports = function(sequelize, DataTypes) {
         return searchable && ownerId === custodyId;
       }
     }
+    */
   }, {
     classMethods: {
       associate: function(models) {
@@ -35,14 +37,16 @@ module.exports = function(sequelize, DataTypes) {
             allowNull: false
           }
         });
-        Book.belongsTo(models.User, {
-          as: 'borrowingBook',
-          foreignKey: {
-            name: 'custodyId',
-            allowNull: false
-          }
-        });
+
+        Book.hasMany(models.BookState, { as: 'historyStates', foreignKey: 'bookId' })
       }
+    },
+
+    hooks: {
+      beforeCreate: function() { console.log('BEFORE CREATE !!!') },
+      afterCreate: function() { console.log('AFTER CREATE !!!') },
+      beforeUpdate: function() { console.log('BEFORE UPDATE !!!') },
+      afterUpdate: function() { console.log('AFTER UPDATE !!!') },
     }
   });
   return Book;

@@ -1,14 +1,17 @@
-import { Book, User } from '../../../models'
+import { Book, BookState, User } from '../../../models'
 
 exports.create = async function (req, res) {
   const isbn = req.body.isbn
   const ownerId = parseInt(req.body.userId, 10)
-  const book = await Book.create({ isbn, ownerId, custodyId: ownerId })
+  const book = await Book.create({ isbn, ownerId })
+  await book.createHistoryState({ receivingCustodyId: ownerId, givingCustodyId: ownerId })
   res.status(201).send(book)
 }
 
 exports.readAll = async function (req, res) {
-  const books = await Book.findAll()
+  const books = await Book.findAll({
+    include: [ { model: BookState, as: 'historyStates' } ]
+  })
   res.status(200).send(books)
 }
 
@@ -22,7 +25,12 @@ exports.update = async function (req, res) {
   const bookId = req.params.id
   const custodyId = req.body.custodyId
   const book = await Book.findById(bookId)
-  await book.update({ custodyId })
+  const historyStates = await book.getHistoryStates()
+  const currentState = historyStates[historyStates.length - 1]
+  await book.createHistoryState({
+    receivingCustodyId: custodyId,
+    givingCustodyId: currentState.receivingCustodyId
+  })
   res.status(200).send(book)
 }
 
