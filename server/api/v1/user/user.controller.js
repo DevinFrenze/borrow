@@ -34,7 +34,7 @@ exports.read = async function (req, res) {
 }
 
 exports.update = async function (req, res) {
-  const userId = req.params.id
+  const userId = req.user.id
   const { username, latitude, longitude } = req.body
   const location = latitude && longitude && { type: 'Point', coordinates: [latitude, longitude] }
   const user = await User.findById(userId)
@@ -44,7 +44,7 @@ exports.update = async function (req, res) {
 }
 
 exports.delete = async function (req, res) {
-  const userId = req.params.id
+  const userId = req.user.id
   const user = await User.findById(userId)
   user.destroy()
   res.status(200).send('user destroyed')

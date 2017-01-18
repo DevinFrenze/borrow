@@ -18,10 +18,8 @@ function clientCallback(clientId, clientSecret, done) {
 
 function accessTokenCallback(accessToken, done) {
   const accessTokenHash = crypto.createHash('sha1').update(accessToken).digest('hex')
-  console.log('find an access token where ' + accessTokenHash)
   AccessToken.findOne({ where: { token: accessTokenHash } }).then(
     function (token) {
-      console.log('TOKEN ' + token)
       if (!token) return done(null, false)
       if (new Date() > token.expirationDate) return done(null, false)
       User.findById(token.userId).then(

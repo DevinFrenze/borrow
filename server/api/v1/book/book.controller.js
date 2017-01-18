@@ -2,7 +2,7 @@ import { Book, BookState, User } from '../../../models'
 
 exports.create = async function (req, res) {
   const isbn = req.body.isbn
-  const ownerId = parseInt(req.body.userId, 10)
+  const ownerId = req.user.id
   const book = await Book.create({ isbn, ownerId })
   res.status(201).send(book)
 }
@@ -20,26 +20,51 @@ exports.read = async function (req, res) {
   res.status(200).send(book)
 }
 
-// function to check out a book
-// TODO add function for changing searchability of book
-exports.update = async function (req, res) {
+exports.checkout = async function (req, res) {
   const bookId = req.params.id
-  const custodyId = parseInt(req.body.custodyId, 10)
+  const receivingCustodyId = req.user.id
   let book = await Book.findById(bookId)
   const historyStates = await book.getHistoryStates()
   const currentState = historyStates[historyStates.length - 1]
+  if (receivingCustodyId === currentState.receivingCustodyId) res.status(400).send()
   await book.createHistoryState({
-    receivingCustodyId: custodyId,
+    receivingCustodyId,
     givingCustodyId: currentState.receivingCustodyId
   })
   await book.reload()
   res.status(200).send(book)
 }
 
+exports.return = async function (req, res) {
+  const bookId = req.params.id
+  const givingCustodyId = req.user.id
+  let book = await Book.findById(bookId)
+  const historyStates = await book.getHistoryStates()
+  const currentState = historyStates[historyStates.length - 1]
+  if (givingCustodyId !== currentState.receivingCustodyId) res.status(401).send()
+  await book.createHistoryState({
+    receivingCustodyId: book.ownerId,
+    givingCustodyId
+  })
+  await book.reload()
+  res.status(200).send(book)
+}
+
+// can only update 'searchable'
+exports.update = async function (req, res) {
+  const bookId = req.params.id
+  const { searchable }  = req.body
+  let book = await Book.findById(bookId)
+  if (book.ownerId !== req.user.id) res.status(401).send()
+  await book.update({ searchable })
+  res.status(200).send(book)
+}
+
 exports.delete = async function (req, res) {
   const bookId = req.params.id
   const book = await Book.findById(bookId)
-  book.destroy()
+  if (book.userId !== req.user.id) res.status(401).send()
+  await book.destroy()
   res.status(200).send('book destroyed')
 }
 
