@@ -2,16 +2,14 @@ import 'babel-polyfill'
 import bodyParser from 'body-parser'
 import morgan from 'morgan'
 import express from 'express'
+import passport from 'passport'
 import models from './models'
 import routes from './routes'
-
-import oauth2orize from 'oauth2orize'
-import passport from 'passport'
 
 const app = express()
 app.use(morgan('combined'))
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(passport.initialize())
 
 routes(app)
