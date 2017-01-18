@@ -1,15 +1,19 @@
 import 'babel-polyfill'
 import bodyParser from 'body-parser'
-import models from './models'
-
+import morgan from 'morgan'
 import express from 'express'
-const app = express()
+import models from './models'
+import routes from './routes'
 
-// TODO move to config
+import oauth2orize from 'oauth2orize'
+import passport from 'passport'
+
+const app = express()
+app.use(morgan('combined'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(passport.initialize())
 
-import routes from './routes'
 routes(app)
 
 models.sequelize.sync().then(

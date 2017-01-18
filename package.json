@@ -7,6 +7,8 @@
     "build": "babel ./server -d build --copy-files",
     "clean": "rm -rf ./build",
     "reset": "mysql -u root -p < setup.sql",
+    "seed": "cd build && sequelize db:seed:all --config ./config/config.json",
+    "seed:undo": "cd build && sequelize db:seed:undo:all --config ./config/config.json",
     "sequelize": "cd ./server && sequelize",
     "start": "node build/index.js",
     "dev": "npm run clean && npm run build && npm run watch & nodemon --watch build ./build/index.js",
@@ -18,10 +20,16 @@
   "dependencies": {
     "babel-polyfill": "^6.20.0",
     "body-parser": "^1.15.2",
+    "crypto": "0.0.3",
     "express": "^4.14.0",
+    "morgan": "^1.7.0",
+    "oauth2orize": "^1.7.0",
     "passport": "^0.3.2",
     "passport-http": "^0.3.0",
-    "sequelize": "^3.29.0"
+    "passport-http-bearer": "^1.0.1",
+    "passport-oauth2-client-password": "^0.1.2",
+    "sequelize": "^3.29.0",
+    "uid2": "0.0.3"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
