@@ -35,13 +35,14 @@ module.exports = function(sequelize, DataTypes) {
         Book.hasMany(models.BookState, { as: 'historyStates', foreignKey: 'bookId' })
       }
     },
-
     hooks: {
-      afterCreate: async function(book) {
+      afterCreate: async function(book, options, cb) {
         await book.createHistoryState({
           receivingCustodyId: book.ownerId,
           givingCustodyId: book.ownerId
         })
+        // TODO figure out if i am supposed to return anything
+        return cb(null, options)
       }
     }
   });

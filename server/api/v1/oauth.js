@@ -31,12 +31,10 @@ oauth2.exchange(
       try {
         const user = await User.findOne({ where: { username } })
         if (!user) return done(null, false)
-        if (password !== user.password) {
-          return done(null, false, {
-            message: 'This password is not correct.'
-          })
-        }
-        return tokenize(user, client, done)
+        if (user.authenticate(password)) return tokenize(user, client, done)
+        return done(null, false, {
+          message: 'This password is not correct.'
+        })
       }
       catch (err) {
         return done(err)
