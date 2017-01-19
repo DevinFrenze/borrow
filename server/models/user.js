@@ -25,6 +25,13 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     }
   }, {
+    defaultScope: {
+      attributes: { exclude: [ 'passwordHash' ] },
+      include: [
+        { model: sequelize.models.Book, as: 'libraryBooks' },
+        { model: sequelize.models.Book, as: 'borrowingBooks' }
+      ]
+    },
     classMethods: {
       associate: function(models) {
         User.hasMany(models.Book, { as: 'libraryBooks', foreignKey: 'ownerId' })

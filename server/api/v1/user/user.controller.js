@@ -3,30 +3,20 @@ import { Book, BookState, User } from '../../../models'
 exports.create = async function (req, res) {
   const { username, latitude, longitude } = req.body
   const location = latitude && longitude && { type: 'Point', coordinates: [latitude, longitude] }
-  const user = await User.create({ username, location })
+  let user = await User.create({ username, location })
+  // using "find" applies the default scope
+  user = await User.findById(user.id)
   res.status(201).send(user)
 }
 
 exports.readAll = async function (req, res) {
-  const users = await User.findAll({
-    include: [
-      { model: Book, as: 'libraryBooks' },
-      { model: Book, as: 'borrowingBooks' }
-    ]
-  })
+  const users = await User.findAll()
   res.status(200).send(users)
 }
 
 exports.read = async function (req, res) {
   const userId = req.params.id
-  const user = await User.findById(userId,
-    {
-      include: [
-        { model: Book, as: 'libraryBooks' },
-        { model: Book, as: 'borrowingBooks' }
-      ]
-    }
-  )
+  const user = await User.findById(userId)
   res.status(200).send(user)
 }
 

@@ -29,7 +29,7 @@ oauth2.exchange(
   oauth2orize.exchange.password(
     async function (client, username, password, scope, done) {
       try {
-        const user = await User.findOne({ where: { username } })
+        const user = await User.scope(null).findOne({ where: { username } })
         if (!user) return done(null, false)
         if (user.authenticate(password)) return tokenize(user, client, done)
         return done(null, false, {
