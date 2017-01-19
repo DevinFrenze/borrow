@@ -1,6 +1,5 @@
-'use strict';
-module.exports = function(sequelize, DataTypes) {
-  var AccessToken = sequelize.define('AccessToken', {
+export default function(sequelize, DataTypes) {
+  const AccessToken = sequelize.define('AccessToken', {
     token: {
       type: DataTypes.STRING,
       allowNull: false
@@ -20,6 +19,6 @@ module.exports = function(sequelize, DataTypes) {
         })
       }
     }
-  });
-  return AccessToken;
-};
+  })
+  return AccessToken
+}

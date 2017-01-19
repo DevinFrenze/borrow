@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   auth: {
     clientId: process.env.CLIENT_ID || 'id',
     clientSecret: process.env.CLIENT_SECRET || 'secret'

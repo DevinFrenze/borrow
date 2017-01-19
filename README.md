@@ -4,6 +4,8 @@ a node server i'm making for practice. api has users and books and users borrow 
 ### TODO
 - add proper error throwing
 - add proper testing
+- test for password strength ?
+- build a tiny frontend ?
 - search for book by location / proximity
 - figure out if the "client" and oauth stuff is not necessary
 - refresh token

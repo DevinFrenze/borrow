@@ -8,7 +8,7 @@ export const up = async function (queryInterface, Sequelize) {
   await User(queryInterface.sequelize, Sequelize.DataTypes).create({
     username: 'devin',
     password: 'password',
-  });
+  })
 
   await queryInterface.bulkInsert('clients', [{
     clientId: config.auth.clientId,
@@ -23,7 +23,7 @@ export const down = async function (queryInterface, Sequelize) {
   return Promise.all([
     queryInterface.bulkDelete('users'),
     queryInterface.bulkDelete('clients'),
-  ]);
+  ])
 }
 
 export default { up, down }

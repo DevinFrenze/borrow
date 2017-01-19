@@ -43,5 +43,5 @@ oauth2.exchange(
   )
 )
 
-exports.grantToken = oauth2.token()
-exports.errorHandler = oauth2.errorHandler()
+export const grantToken = oauth2.token()
+export const errorHandler = oauth2.errorHandler()

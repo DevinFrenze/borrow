@@ -1,4 +1,3 @@
-import 'babel-polyfill'
 import bodyParser from 'body-parser'
 import morgan from 'morgan'
 import express from 'express'
@@ -13,8 +12,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(passport.initialize())
 app.use(helmet())
-
-routes(app)
+app.use(routes)
 
 models.sequelize.sync().then(
   app.listen(3000, 'localhost', function () {
@@ -22,4 +20,4 @@ models.sequelize.sync().then(
   })
 )
 
-exports = module.exports = app
+export default app

@@ -1,13 +1,12 @@
-'use strict';
-module.exports = function(sequelize, DataTypes) {
-  var Book = sequelize.define('Book', {
+export default function(sequelize, DataTypes) {
+  const Book = sequelize.define('Book', {
     isbn: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: false,
       validate: {
         isTenOrThirteenLong: function(isbn) {
-          return isbn.length === 10 || isbn.length === 13;
+          return isbn.length === 10 || isbn.length === 13
         }
       }
     },
@@ -26,7 +25,7 @@ module.exports = function(sequelize, DataTypes) {
             allowNull: false
           },
           onDelete: 'CASCADE'
-        });
+        })
 
         Book.belongsTo(models.User, {
           as: 'borrowingBook',
@@ -34,7 +33,7 @@ module.exports = function(sequelize, DataTypes) {
             name: 'borrowerId',
             allowNull: true
           }
-        });
+        })
 
         Book.hasMany(models.BookState, { as: 'historyStates', foreignKey: 'bookId' })
       }
@@ -55,6 +54,6 @@ module.exports = function(sequelize, DataTypes) {
         }
       }
     }
-  });
-  return Book;
-};
+  })
+  return Book
+}

@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt'
 
-module.exports = function(sequelize, DataTypes) {
-  var User = sequelize.define('User', {
+export default function(sequelize, DataTypes) {
+  const User = sequelize.define('User', {
     username: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -53,6 +53,6 @@ module.exports = function(sequelize, DataTypes) {
         return cb(null, options)
       }
     }
-  });
-  return User;
-};
+  })
+  return User
+}

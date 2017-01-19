@@ -1,6 +1,5 @@
-'use strict';
-module.exports = function(sequelize, DataTypes) {
-  var BookState = sequelize.define('BookState', {}, {
+export default function(sequelize, DataTypes) {
+  const BookState = sequelize.define('BookState', {}, {
     classMethods: {
       associate: function(models) {
         BookState.belongsTo(models.Book, {
@@ -10,7 +9,7 @@ module.exports = function(sequelize, DataTypes) {
             allowNull: false
           },
           onDelete: 'CASCADE'
-        });
+        })
 
         BookState.belongsTo(models.User, {
           as: 'receivingHistoryState',
@@ -18,7 +17,7 @@ module.exports = function(sequelize, DataTypes) {
             name: 'receivingCustodyId',
             allowNull: false
           }
-        });
+        })
 
         BookState.belongsTo(models.User, {
           as: 'givingHistoryState',
@@ -26,9 +25,9 @@ module.exports = function(sequelize, DataTypes) {
             name: 'givingCustodyId',
             allowNull: false
           }
-        });
+        })
       }
     }
-  });
-  return BookState;
-};
+  })
+  return BookState
+}
