@@ -11,7 +11,7 @@ module.exports = function(sequelize, DataTypes) {
       validate: { notEmpty: true }
     },
     password: {
-      type: DataTypes.STRING,
+      type: DataTypes.VIRTUAL,
       allowNull: false,
       defaultValue: 'password', // TODO remove this line after testing
       validate: { notEmpty: true }
@@ -34,16 +34,12 @@ module.exports = function(sequelize, DataTypes) {
     },
     instanceMethods: {
       authenticate: function(password) {
-        console.log(bcrypt.compareSync(password, this.passwordHash))
         return bcrypt.compareSync(password, this.passwordHash)
       }
     },
     hooks: {
       beforeCreate: function(user, options, cb) {
-        console.log('MMMMMMMMMMMMMMMMMMMMMMMMMMMM')
         const password = user.get('password')
-        console.log('password ' + password)
-        console.log('password ' + user.password)
         const hash = bcrypt.hashSync(password, 10)
         user.set('passwordHash', hash)
         return cb(null, options)
