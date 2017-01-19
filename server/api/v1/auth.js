@@ -38,5 +38,6 @@ passport.use(new BasicStrategy( clientCallback ))
 passport.use(new ClientPasswordStrategy( clientCallback ))
 passport.use(new BearerStrategy( tokenCallback ))
 
+// note: apparently works even without the 'oauth2-client-password' on the line below
 exports.passwordAuthenticate = passport.authenticate(['basic', 'oauth2-client-password'], { session: false })
 exports.tokenAuthenticate = passport.authenticate('bearer', { session: false })
