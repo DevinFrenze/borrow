@@ -11,8 +11,7 @@ exports.readAll = async function (req, res) {
   const users = await User.findAll({
     include: [
       { model: Book, as: 'libraryBooks' },
-      { model: BookState, as: 'givingHistoryStates' },
-      { model: BookState, as: 'receivingHistoryStates' }
+      { model: Book, as: 'borrowingBooks' }
     ]
   })
   res.status(200).send(users)
@@ -24,8 +23,7 @@ exports.read = async function (req, res) {
     {
       include: [
         { model: Book, as: 'libraryBooks' },
-        { model: BookState, as: 'givingHistoryStates' },
-        { model: BookState, as: 'receivingHistoryStates' }
+        { model: Book, as: 'borrowingBooks' }
       ]
     }
   )
@@ -44,7 +42,11 @@ exports.update = async function (req, res) {
 
 exports.delete = async function (req, res) {
   const userId = req.user.id
-  const user = await User.findById(userId)
+  const user = await User.findById(userId, {
+    include: [ { model: Book, as: 'borrowingBooks' } ]
+  })
+  // TODO don't allow deletion of a user if they have books checked out
+  if(user.borrowingBooks.length) res.status(403).send('can not delete user with books currently checked out')
   user.destroy()
   res.status(200).send('user destroyed')
 }
