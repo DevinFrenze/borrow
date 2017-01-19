@@ -21,6 +21,7 @@ export const up = async function (queryInterface, Sequelize) {
 
   await queryInterface.bulkInsert('users', [{
     username: 'devin',
+    passwordHash: 'password',
     password: 'password',
     createdAt: now,
     updatedAt: now,

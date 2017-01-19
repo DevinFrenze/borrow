@@ -5,6 +5,8 @@ import oauth from './oauth'
 import express from 'express'
 const router = express.Router()
 
+router.get('/users', user.readAll)
+
 // auth endpoints
 router.post('/token', passwordAuthenticate, oauth.grantToken, oauth.errorHandler)
 
