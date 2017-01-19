@@ -1,6 +1,5 @@
 import { Book, BookState, User } from '../../../models'
 
-// TODO throw actual errors when users don't exist or usernames are taken
 exports.create = async function (req, res) {
   const { username, latitude, longitude } = req.body
   const location = latitude && longitude && { type: 'Point', coordinates: [latitude, longitude] }

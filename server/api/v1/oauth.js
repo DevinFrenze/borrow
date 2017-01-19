@@ -25,7 +25,6 @@ async function tokenize (user, client, done) {
   }
 }
 
-// TODO more official authentication w/ password encryption
 oauth2.exchange(
   oauth2orize.exchange.password(
     async function (client, username, password, scope, done) {

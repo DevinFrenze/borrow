@@ -5,8 +5,6 @@ import oauth from './oauth'
 import express from 'express'
 const router = express.Router()
 
-// TODO cascade ???
-
 // auth endpoints
 router.post('/token', passwordAuthenticate, oauth.grantToken, oauth.errorHandler)
 
