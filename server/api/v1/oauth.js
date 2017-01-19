@@ -5,7 +5,7 @@ import crypto from 'crypto'
 
 const oauth2 = oauth2orize.createServer()
 
-async function tokenize (user, client, done) {
+async function tokenize (user, done) {
   const token = uid(256)
   const tokenHash = crypto.createHash('sha1').update(token).digest('hex')
   const now = new Date().getTime()
@@ -15,7 +15,6 @@ async function tokenize (user, client, done) {
     const accessToken = await AccessToken.create({
       token: tokenHash,
       expirationDate: expirationDate,
-      clientId: client.id,
       userId: user.id
     })
     return done(null, token, null, { expires_in: expirationDate })
@@ -37,7 +36,7 @@ oauth2.exchange(
             message: 'This password is not correct.'
           })
         }
-        return tokenize(user, client, done)
+        return tokenize(user, done)
       }
       catch (err) {
         return done(err)

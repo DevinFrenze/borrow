@@ -1,5 +1,4 @@
 import 'babel-polyfill'
-import config from '../config/environment'
 import path from 'path';
 
 export const up = async function (queryInterface, Sequelize) {
@@ -25,14 +24,6 @@ export const up = async function (queryInterface, Sequelize) {
     createdAt: now,
     updatedAt: now,
   }], {})
-
-  await queryInterface.bulkInsert('clients', [{
-    clientId: config.auth.clientId,
-    clientSecret: config.auth.clientSecret,
-    trustedClient: true,
-    createdAt: now,
-    updatedAt: now,
-  }], {})
 }
 
 export const down = async function (queryInterface, Sequelize) {
@@ -47,7 +38,6 @@ export const down = async function (queryInterface, Sequelize) {
 
   return Promise.all([
     queryInterface.bulkDelete('users'),
-    queryInterface.bulkDelete('clients'),
     // removeEntry,
   ]);
 }

@@ -1,21 +1,11 @@
 import passport from 'passport'
 import { BasicStrategy } from 'passport-http'
 import { Strategy as BearerStrategy } from 'passport-http-bearer'
-import { Strategy as ClientPasswordStrategy } from 'passport-oauth2-client-password'
 import crypto from 'crypto'
 import { AccessToken, Client, User } from '../../models'
 
-async function clientCallback(clientId, clientSecret, done) {
-  try {
-    const client = await Client.findOne({ where: { clientId } })
-    if (!client) return done(null, false)
-    if (!client.trustedClient) return done(null, false)
-    if (client.clientSecret == clientSecret) return done(null, client)
-    return done(null, false)
-  }
-  catch (err) {
-    return done(err)
-  }
+async function basicCallback(clientId, clientSecret, done) {
+  return done(null, true)
 }
 
 async function tokenCallback(token, done) {
@@ -34,10 +24,9 @@ async function tokenCallback(token, done) {
   }
 }
 
-passport.use(new BasicStrategy( clientCallback ))
-passport.use(new ClientPasswordStrategy( clientCallback ))
+passport.use(new BasicStrategy( basicCallback ))
 passport.use(new BearerStrategy( tokenCallback ))
 
 // note: apparently works even without the 'oauth2-client-password' on the line below
-exports.passwordAuthenticate = passport.authenticate(['basic', 'oauth2-client-password'], { session: false })
+exports.passwordAuthenticate = passport.authenticate('basic', { session: false })
 exports.tokenAuthenticate = passport.authenticate('bearer', { session: false })

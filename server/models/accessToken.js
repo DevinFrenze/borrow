@@ -15,9 +15,6 @@ module.exports = function(sequelize, DataTypes) {
         AccessToken.belongsTo(models.User, {
           foreignKey: { name: 'userId', allowNull: false }
         })
-        AccessToken.belongsTo(models.Client, {
-          foreignKey: { name: 'clientId', allowNull: false }
-        })
       }
     }
   });
