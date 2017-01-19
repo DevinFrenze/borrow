@@ -29,7 +29,8 @@ module.exports = function(sequelize, DataTypes) {
           foreignKey: {
             name: 'ownerId',
             allowNull: false
-          }
+          },
+          onDelete: 'CASCADE'
         });
 
         Book.hasMany(models.BookState, { as: 'historyStates', foreignKey: 'bookId' })

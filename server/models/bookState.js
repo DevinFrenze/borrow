@@ -8,7 +8,8 @@ module.exports = function(sequelize, DataTypes) {
           foreignKey: {
             name: 'bookId',
             allowNull: false
-          }
+          },
+          onDelete: 'CASCADE'
         });
 
         BookState.belongsTo(models.User, {
