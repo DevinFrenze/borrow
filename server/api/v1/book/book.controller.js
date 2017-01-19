@@ -22,31 +22,23 @@ exports.read = async function (req, res) {
 
 exports.checkout = async function (req, res) {
   const bookId = req.params.id
-  const receivingCustodyId = req.user.id
+  const borrowerId = req.user.id
   let book = await Book.findById(bookId)
-  const historyStates = await book.getHistoryStates()
-  const currentState = historyStates[historyStates.length - 1]
-  if (receivingCustodyId === currentState.receivingCustodyId) res.status(400).send()
-  await book.createHistoryState({
-    receivingCustodyId,
-    givingCustodyId: currentState.receivingCustodyId
-  })
-  await book.reload()
+  if (book.borrowerId) {
+    res.status(400).send('can not check out a book that is already checked out')
+  }
+  await book.update({ borrowerId })
   res.status(200).send(book)
 }
 
 exports.return = async function (req, res) {
   const bookId = req.params.id
-  const givingCustodyId = req.user.id
+  const borrowerId = req.user.id
   let book = await Book.findById(bookId)
-  const historyStates = await book.getHistoryStates()
-  const currentState = historyStates[historyStates.length - 1]
-  if (givingCustodyId !== currentState.receivingCustodyId) res.status(401).send()
-  await book.createHistoryState({
-    receivingCustodyId: book.ownerId,
-    givingCustodyId
-  })
-  await book.reload()
+  if (book.borrowerId !== borrowerId) {
+    res.status(400).send('can not return a book that you do not have checked out')
+  }
+  await book.update({ borrowerId: null })
   res.status(200).send(book)
 }
 

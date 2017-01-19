@@ -15,12 +15,7 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: true
-    },
-    checkedOut: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: false
-    },
+    }
   }, {
     classMethods: {
       associate: function(models) {
@@ -33,17 +28,31 @@ module.exports = function(sequelize, DataTypes) {
           onDelete: 'CASCADE'
         });
 
+        Book.belongsTo(models.User, {
+          as: 'borrowingBook',
+          foreignKey: {
+            name: 'borrowerId',
+            allowNull: true
+          }
+        });
+
         Book.hasMany(models.BookState, { as: 'historyStates', foreignKey: 'bookId' })
       }
     },
     hooks: {
-      afterCreate: async function(book, options, cb) {
+      afterCreate: async function(book, options) {
         await book.createHistoryState({
           receivingCustodyId: book.ownerId,
           givingCustodyId: book.ownerId
         })
-        // TODO figure out if i am supposed to return anything
-        return cb(null, options)
+      },
+      beforeUpdate: async function(book, options) {
+        if (options.fields.includes('borrowerId')) {
+          await book.createHistoryState({
+            receivingCustodyId: book.borrowerId || book.ownerId,
+            givingCustodyId: book.previous('borrowerId') || book.ownerId
+          })
+        }
       }
     }
   });
