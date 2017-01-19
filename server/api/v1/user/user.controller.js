@@ -1,9 +1,9 @@
 import { Book, BookState, User } from '../../../models'
 
 exports.create = async function (req, res) {
-  const { username, latitude, longitude } = req.body
+  const { username, latitude, longitude, password } = req.body
   const location = latitude && longitude && { type: 'Point', coordinates: [latitude, longitude] }
-  let user = await User.create({ username, location })
+  let user = await User.create({ username, location, password })
   // using "find" applies the default scope
   user = await User.findById(user.id)
   res.status(201).send(user)
