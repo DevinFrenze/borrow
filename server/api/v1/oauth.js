@@ -44,4 +44,4 @@ oauth2.exchange(
 )
 
 export const grantToken = oauth2.token()
-export const errorHandler = oauth2.errorHandler()
+export const authErrorHandler = oauth2.errorHandler()
