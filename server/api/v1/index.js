@@ -5,6 +5,18 @@ import { grantToken, errorHandler } from './oauth'
 import express from 'express'
 const router = express.Router()
 
+// default error wrapper
+function errorWrapper(fn) {
+  return async function (req, res, next) {
+    try { await fn(req, res, next) }
+    catch (error) { next(error) }
+  }
+}
+
+// wrap every method form each controller in error handler
+Object.keys(book).map(function (key) { book[key] = errorWrapper(book[key]) })
+Object.keys(user).map(function (key) { user[key] = errorWrapper(user[key]) })
+
 router.get('/users', user.readAll)
 
 // auth endpoints
@@ -28,5 +40,11 @@ router.delete('/books/:id', tokenAuthenticate, book.destroy)
 router.get('/users/:id', tokenAuthenticate, user.read)
 router.patch('/users/me', tokenAuthenticate, user.update)
 router.delete('/users/me', tokenAuthenticate, user.destroy)
+
+// default error handler
+router.use(function(err, req, res, next) {
+  // TODO catch errors here
+  res.status(500).send(err.errors)
+})
 
 export default router
